@@ -4,17 +4,17 @@ import PackageDescription
 import class Foundation.ProcessInfo
 
 let package = Package(
-    name: "swift-x509",
+    name: "chat-x509",
     platforms: [
         .macOS(.v10_15),
         .iOS(.v13)
     ],
     products: [
-        .executable(name: "SwiftX509", targets: ["SwiftX509"]),
+        .executable(name: "chat-x509", targets: ["swift-console"]),
     ],
     targets: [
         .executableTarget(
-            name: "SwiftX509",
+            name: "swift-console",
             exclude: ["CMakeLists.txt"]
         ),
     ]
@@ -22,5 +22,6 @@ let package = Package(
 
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
     package.dependencies += [
+        .package(url: "https://github.com/apple/swift-certificates.git", from: "0.6.0"),
     ]
 }
