@@ -15,13 +15,14 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "swift-console",
-            exclude: ["CMakeLists.txt"]
-        ),
+            dependencies: [
+                .product(name: "X509", package: "swift-certificates")
+            ]),
     ]
 )
 
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
     package.dependencies += [
-        .package(url: "https://github.com/apple/swift-certificates.git", from: "0.6.0"),
+        .package(url: "https://github.com/apple/swift-certificates.git", branch: "main"),
     ]
 }
