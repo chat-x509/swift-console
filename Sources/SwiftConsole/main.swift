@@ -47,12 +47,12 @@ func run() throws {
             print(": \(args)")
         }
         if (data.count > 2 && data[0] == "show") {
-           switch (data[2]) {
-              case "crt": try showCRT(name: data[1])
-              case "csr": try showCSR(name: data[1])
-              case "cms": try showCMS(name: data[1])
-              default: ()
-           }
+            switch (data[2]) {
+                case "crt": try showCRT(name: data[1])
+                case "csr": try showCSR(name: data[1])
+                case "cms": try showCMS(name: data[1])
+                default: ()
+            }
         }
         print("> ", terminator: "")
      }
