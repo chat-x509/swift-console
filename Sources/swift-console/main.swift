@@ -33,21 +33,19 @@ func showCSR(name: String) throws {
 
 func run() throws {
      print(": CHAT 💬 X.509 © SYNRC")
-     print(">", terminator: "")
+     print("> ", terminator: "")
      while let line = readLine() {
         let data = line.components(separatedBy: " ")
         if (data.count > 2 && data[0] == "show") {
-           print("Show: \(data)")
            switch (data[2]) {
               case "crt": try showCRT(name: data[1])
               case "csr": try showCSR(name: data[1])
               case "cms": try showCMS(name: data[1])
               default: ()
            }
-        } else {
-           print(": \(line)")
-           print(">", terminator: "")
         }
+        print(": \(data)")
+        print("> ", terminator: "")
      }
      print("Bye!")
 }
