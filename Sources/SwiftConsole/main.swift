@@ -2,34 +2,36 @@ import SwiftASN1
 import Crypto
 import Foundation
 
+func exists(f: String) -> Bool { return FileManager.default.fileExists(atPath: f) }
+
 func showCMS(name: String) throws {
-  print("CMS: \(name)")
-  let url = URL(fileURLWithPath: name)
-  do {
-     let data = try Data(contentsOf: url)
-     let cms = try CMSContentInfo(derEncoded: Array(data))
-     print("\(cms.contentType)")
-  }
+     print(": CMS=\(name)")
+     let url = URL(fileURLWithPath: name)
+     if (!exists(f: url.path)) { print(": CMS file not found.") } else {
+         let data = try Data(contentsOf: url)
+         let cms = try CMSContentInfo(derEncoded: Array(data))
+         print(": \(cms.contentType)")
+     }
 }
 
 func showCRT(name: String) throws {
-  print("Cert: \(name)")
-  let url = URL(fileURLWithPath: name)
-  do {
-     let data = try Data(contentsOf: url)
-     let crt = try Certificate(derEncoded: Array(data))
-     print("\(crt)")
-  }
+     print(": CRT=\(name)")
+     let url = URL(fileURLWithPath: name)
+     if (!exists(f: url.path)) { print(": CRT file not found.") } else {
+         let data = try Data(contentsOf: url)
+         let crt = try Certificate(derEncoded: Array(data))
+         print(": \(crt)")
+     }
 }
 
 func showCSR(name: String) throws {
-  print("CSR: \(name)")
-  let url = URL(fileURLWithPath: name)
-  do {
-     let data = try Data(contentsOf: url)
-     let csr = try CertificateSigningRequest(derEncoded: Array(data))
-     print("\(csr)")
-  }
+     print(": CSR=\(name)")
+     let url = URL(fileURLWithPath: name)
+     if (!exists(f: url.path)) { print(": CSR file not found.") } else {
+         let data = try Data(contentsOf: url)
+         let csr = try CertificateSigningRequest(derEncoded: Array(data))
+         print(": \(csr)")
+     }
 }
 
 func run() throws {
@@ -37,6 +39,13 @@ func run() throws {
      print("> ", terminator: "")
      while let line = readLine() {
         let data = line.components(separatedBy: " ")
+        if (data.joined() == "") {
+            print("> ", terminator: "")
+            continue
+        } else {
+            let args = data.filter { name in name != "" }
+            print(": \(args)")
+        }
         if (data.count > 2 && data[0] == "show") {
            switch (data[2]) {
               case "crt": try showCRT(name: data[1])
@@ -45,7 +54,6 @@ func run() throws {
               default: ()
            }
         }
-        print(": \(data)")
         print("> ", terminator: "")
      }
      print("Bye!")
