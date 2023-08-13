@@ -43,7 +43,7 @@ func run() throws {
             print("> ", terminator: "")
             continue
         } else {
-            let args = data.filter { name in name != "" }
+            let args = data.filter { $0 != "" }
             print(": \(args)")
         }
         if (data.count > 2 && data[0] == "show") {
