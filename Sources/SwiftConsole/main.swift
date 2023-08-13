@@ -1,5 +1,6 @@
 import Foundation
-@testable @_spi(CMS) import X509
+import Crypto
+import SwiftASN1
 
 func showCMS(name: String) throws {
   print("CMS: \(name)")
