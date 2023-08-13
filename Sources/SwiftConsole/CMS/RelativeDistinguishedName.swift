@@ -13,7 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftASN1
-import _CertificateInternals
 
 /// A ``RelativeDistinguishedName`` is a collection of elements at a single level of a hierarchical
 /// ``DistinguishedName``.
