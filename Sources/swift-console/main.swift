@@ -7,7 +7,6 @@ func showCMS(name: String) throws {
   do {
      let data = try Data(contentsOf: url)
      let cms = try CMSContentInfo(derEncoded: Array(data))
-//     let env = try CMSEnvelopenContentInfo(derEncoded: Array(cms.content))
      print("\(cms.contentType)")
   }
 }
