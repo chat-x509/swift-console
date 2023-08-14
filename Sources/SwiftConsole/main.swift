@@ -21,6 +21,13 @@ class Client {
      }
   }
 
+  public static func kdf(data: Array<String>) -> Data {
+     let x = KDF.derive(hash: "sha512", key: Data(bytes: [0,1,2,3,4]),
+                        len: 20, data: Data(bytes: [100,101,102,103,104]))
+     print(": \(Array(x))")
+     return x
+  }
+
   public static func args(data: Array<String>) -> Array<String> {
      if (data.joined() == "") {
          return []
@@ -35,6 +42,7 @@ class Client {
      switch (data[0]) {
          case "bye": break
          case "show": try show(data: data)
+         case "kdf": try kdf(data: data)
          default: nop()
      }
   }
