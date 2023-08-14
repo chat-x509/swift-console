@@ -43,12 +43,8 @@ func run() throws {
             print("> ", terminator: "")
             continue
         } else {
-            let f: (_ x: String) -> Bool = { (x: String) -> Bool in x != "" }
-            let args1 = data.filter(f)
-            let args2 = data.filter({ (x: String) -> Bool in x != "" })
-            let args3 = data.filter({ x in x != "" })
-            let args4  = data.filter({ $0 != "" })
-            print(": \(args1)")
+            let args  = data.filter({ $0 != "" })
+            print(": \(args)")
         }
         if (data.count > 2 && data[0] == "show") {
             switch (data[2]) {
