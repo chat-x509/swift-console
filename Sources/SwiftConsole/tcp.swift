@@ -1,7 +1,7 @@
 import Foundation
 import CoreFoundation
 
-class CHATClient: NSObject, StreamDelegate {
+class TCP: NSObject, StreamDelegate {
 
     var readStream: Unmanaged<CFReadStream>?
     var writeStream: Unmanaged<CFWriteStream>?
@@ -14,7 +14,8 @@ class CHATClient: NSObject, StreamDelegate {
 
 
     func connect() {
-        CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (url.absoluteString as! CFString), port, &readStream, &writeStream);
+        CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
+           (url.absoluteString as! CFString), port, &readStream, &writeStream);
         print("Opening streams.")
 //      outputStream = writeStream?.takeRetainedValue()
 //      inputStream = readStream?.takeRetainedValue()
