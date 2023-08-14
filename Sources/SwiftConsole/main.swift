@@ -16,7 +16,9 @@ class Client {
             let args  = data.filter({ $0 != "" })
             print(": \(args)")
         }
-        if (data.count > 2 && data[0] == "show") {
+        if (data[0] == "bye") {
+            break
+        } else if (data.count > 2 && data[0] == "show") {
             switch (data[2]) {
                 case "crt": try Chat.showCRT(name: data[1])
                 case "csr": try Chat.showCSR(name: data[1])
@@ -26,7 +28,7 @@ class Client {
         }
         print("> ", terminator: "")
      }
-     print("Bye!")
+     print(": Bye!")
   }
 
 }
