@@ -10,14 +10,14 @@ class Client {
 
   public static func show(data: Array<String>) throws {
      if (data.count > 2) {
-        switch (data[2]) {
-           case "crt": try Chat.showCRT(name: data[1])
-           case "csr": try Chat.showCSR(name: data[1])
-           case "cms": try Chat.showCMS(name: data[1])
-           default: ()
-        }
+         switch (data[2]) {
+            case "crt": try Chat.showCRT(name: data[1])
+            case "csr": try Chat.showCSR(name: data[1])
+            case "cms": try Chat.showCMS(name: data[1])
+            default: ()
+         }
      } else {
-        print(": Not enough arguments.")
+         print(": Not enough arguments.")
      }
   }
 
@@ -39,19 +39,18 @@ class Client {
      }
   }
 
-  public static func run() throws {
+  public static func loop() throws {
      print(": CHAT 💬 X.509 © SYNRC") ; nop()
      while let line = readLine() {
-        let data = line.components(separatedBy: " ")
-        let args = args(data: data)
-        switch (args) {
-           case []: nop() ; continue
-           default: try execute(data: args)
-        } 
+           let args = args(data: line.components(separatedBy: " "))
+           switch (args) {
+               case []: nop() ; continue
+               default: try execute(data: args)
+           }
      }
      print(": Bye!")
   }
 
 }
 
-try Client.run()
+try Client.loop()
