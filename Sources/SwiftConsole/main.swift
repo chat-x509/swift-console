@@ -6,7 +6,7 @@ try Console.loop()
 public class Console {
 
   public static var quit = false
-  public static var no = "010-WELCOME"
+  public static var no = 2
 
   public static func loop() throws {
      print(": CHAT 💬 X.509 © SYNRC")
@@ -23,7 +23,6 @@ public class Console {
          return []
      } else {
          let args  = data.filter { $0 != "" }
-         print(": \(args)")
          return args
      }
   }

@@ -1,6 +1,12 @@
 import Foundation
 import Crypto
 
+extension String {
+  func leftPad(toLength: Int, withPad character: Character) -> String {
+       if count < toLength { return String(repeating: character, count: toLength - count) + self }
+       else { return self } }
+}
+
 public class Form {
 
   public struct screen {
@@ -20,37 +26,23 @@ public class Form {
     let rico: (String,String)
   }
 
-  public static func show(data: Array<String>) {
+  public static func show(data: Array<String>) throws {
+    let app = App.screens
     for i in 0...app.count-1 {
-      print("\u{1b}[0m\u{1b}[1;97m\u{1b}[45m    \u{1b}[0;97m\u{1b}[1;104m \(app[i].name)\u{1b}[0m\u{1b}[0K")
-    }
-    for i in 0...app.count-1 {
-      if (app[i].name == Console.no) {
+      if (app[i].no == Console.no) {
+         let screen = app[i].name
+         let name = app[i].sections[0].name
+         print("     \u{1b}[0;97m\u{1b}[1;104m \(screen) \u{1b}[0m\u{1b}[0K")
+         print("\u{1b}[1;33m\u{1b}[44m▄▄▄▄▄\u{1b}[0;97m\u{1b}[1;104m \(name) \u{1b}[0m\u{1b}[0K")
          for j in 0...app[i].sections[0].rows.count-1 {
-            print("\u{1b}[0m\u{1b}[1;97m\u{1b}[45m \(app[i].sections[0].rows[j].no) ", terminator: "")
-            print("\u{1b}[0;93m\u{1b}[0;104m \(app[i].sections[0].rows[j].desc)", terminator: "")
+            let no = String(app[i].sections[0].rows[j].no).leftPad(toLength: 3, withPad: "0")
+            let desc = String(app[i].sections[0].rows[j].desc).padding(toLength: 30, withPad: " ", startingAt:0)
+            print("\u{1b}[0m\u{1b}[1;97m\u{1b}[45m \(no) ", terminator: "")
+            print("\u{1b}[0;93m\u{1b}[0;104m \(desc)", terminator: "")
             print("\u{1b}[0m\u{1b}[0K")
          }
       }
     }
   }
 
-  public static var app: [screen] = [
-    screen(
-       no: 1,
-       name: "010-WELCOME",
-       sections: [
-          section(name: "Вітаємо в CHAT!",
-          rows: [ row(no: 1, desc: "Реєстрація", rico: ("more","040-REG")),
-                  row(no: 2, desc: "Авторизація", rico: ("more","")),
-                  row(no: 3, desc: "Імпорт", rico: ("more","")), ]) ]),
-    screen(
-       no: 2,
-       name: "040-REG",
-       sections: [
-          section(name: "Реєстрація",
-          rows: [ row(no: 1, desc: "Позивний", rico: ("text","")),
-                  row(no: 2, desc: "Пароль", rico: ("pin","")),
-                  row(no: 3, desc: "Продовжити", rico: ("more","090-PROFILE")), ]) ]),
-  ]
 }
