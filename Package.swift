@@ -5,7 +5,7 @@ import class Foundation.ProcessInfo
 
 let package = Package(
     name: "chat-x509",
-    platforms: [ .macOS(.v10_15), .iOS(.v13) ],
+    platforms: [ .macOS(.v13), .iOS(.v13) ],
     products: [ .executable(name: "chat-x509", targets: ["SwiftConsole"]), ],
     targets: [
       .executableTarget(

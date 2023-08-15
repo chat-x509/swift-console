@@ -5,16 +5,27 @@ import Foundation
 public class Cmd {
 
   public static func exists(f: String) -> Bool { return FileManager.default.fileExists(atPath: f) }
+
   public static func nop() { print(">", terminator: " ") }
+
   public static func showKDF(data: Array<String>) throws {
      let x = KDF.derive(alg: "sha512", key: Data([0,1,2,3,4]),
                         len: 20, data: Data([100,101,102,103,104]))
      print(": KDF \(Array(x))")
   }
 
+  public static func help() {
+     print(": bye — Quit Application")
+     print(": kw — AES Key Wrap")
+     print(": show — Show X.509 Envelopes")
+     print(": kdf — Key Derive Function ")
+  }
+
   public static func execute(data: Array<String>) throws {
      switch (data[0]) {
          case "bye": break
+         case "?": help()
+         case "kw": try Block.test()
          case "show": try Cmd.showDER(data: data)
          case "kdf": try Cmd.showKDF(data: data)
          default: Cmd.nop()
