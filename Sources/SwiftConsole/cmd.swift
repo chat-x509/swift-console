@@ -1,4 +1,3 @@
-import SwiftASN1
 import Crypto
 import Foundation
 
@@ -21,14 +20,14 @@ public class Cmd {
      print(": kdf — Key Derive Function ")
   }
 
-  public static func execute(data: Array<String>) throws {
+  public static func execute(_ data: Array<String>) throws -> Bool {
      switch (data[0]) {
-         case "bye": break
-         case "?": help()
-         case "kw": try Block.test()
-         case "show": try Cmd.showDER(data: data)
-         case "kdf": try Cmd.showKDF(data: data)
-         default: Cmd.nop()
+         case "bye": return true
+         case "?": help() ; return false
+         case "kw": try Block.testKeyWrap() ; return false
+         case "show": try Cmd.showDER(data: data) ; return false
+         case "kdf": try Cmd.showKDF(data: data) ; return false
+         default: Cmd.nop() ; return false
      }
   }
 
