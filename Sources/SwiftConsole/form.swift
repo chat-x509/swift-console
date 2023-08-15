@@ -4,8 +4,7 @@ import Crypto
 extension String {
   func leftPad(toLength: Int, withPad character: Character) -> String {
        if count < toLength { return String(repeating: character, count: toLength - count) + self }
-       else { return self } }
-}
+       else { return self } } }
 
 public class Form {
 
@@ -23,6 +22,7 @@ public class Form {
   public struct row {
     let no: Int
     let desc: String
+    let lico: (String,String)
     let rico: (String,String)
   }
 
