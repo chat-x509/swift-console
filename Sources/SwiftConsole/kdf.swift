@@ -1,14 +1,14 @@
 import Foundation
 import Crypto
 
-class KDF {
+public class KDF {
 
   public static func ceil(x: Int, y: Int) -> Int {
-      if (x % y == 0) { return (x / y) } else { return (x / y) + 1 }
+      if (x % y == 0) { return x / y } else { return x / y + 1 }
   }
 
-  public static func keysize(hash: String) -> Int {
-      switch (hash) {
+  public static func keysize(alg: String) -> Int {
+      switch (alg) {
           case "md5":    return 16
           case "sha1":   return 20
           case "sha224": return 28
@@ -19,8 +19,8 @@ class KDF {
       }
   }
 
-  public static func hash(hash: String, bin: Data) -> Data {
-      switch (hash) {
+  public static func hash(alg: String, bin: Data) -> Data {
+      switch (alg) {
           case "md5": return Data(Insecure.MD5.hash(data: bin).makeIterator())
           case "sha1": return Data(Insecure.SHA1.hash(data: bin).makeIterator())
           case "sha256": return Data(SHA256.hash(data: bin).makeIterator())
@@ -30,21 +30,20 @@ class KDF {
       }
   }
 
-  public static func derive(hash: String, key: Data, len: Int, data: Data) -> Data {
-      let ceil = ceil(x: len, y: keysize(hash: hash))
+  public static func derive(alg: String, key: Data, len: Int, data: Data) -> Data {
+      let ceil = ceil(x: len, y: keysize(alg: alg))
       let seq = stride(from: ceil, to: 0, by: -1).map { $0 }
-      var acc = Data(bytes: [])
+      var res = Data(bytes: [])
       for item in seq {
           var iter = Data()
-          let bytes = Data(bytes: [0,0,0,UInt8(item)])
           iter.append(contentsOf: key)
-          iter.append(contentsOf: bytes)
+          iter.append(contentsOf: Data(bytes: [0,0,0,UInt8(item)]))
           iter.append(contentsOf: data)
-          var kdf = KDF.hash(hash: hash, bin: iter)
-          kdf.append(contentsOf: acc)
-          acc = kdf
+          var kdf = KDF.hash(alg: alg, bin: iter)
+          kdf.append(contentsOf: res)
+          res = kdf
       }
-      return acc.subdata(in: 0 ..< len)
+      return res.subdata(in: 0 ..< len)
   }
 
 }

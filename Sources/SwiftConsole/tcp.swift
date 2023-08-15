@@ -1,7 +1,7 @@
 import Foundation
 import CoreFoundation
 
-class TCP: NSObject, StreamDelegate {
+public class TCP: NSObject, StreamDelegate {
 
     var readStream: Unmanaged<CFReadStream>?
     var writeStream: Unmanaged<CFWriteStream>?
@@ -17,8 +17,8 @@ class TCP: NSObject, StreamDelegate {
         CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
            (url.absoluteString as! CFString), port, &readStream, &writeStream);
         print("Opening streams.")
-//      outputStream = writeStream?.takeRetainedValue()
-//      inputStream = readStream?.takeRetainedValue()
+        outputStream = writeStream?.takeRetainedValue()
+        inputStream = readStream?.takeRetainedValue()
         outputStream?.delegate = self;
         inputStream?.delegate = self;
         outputStream?.schedule(in: RunLoop.current, forMode: RunLoop.Mode.default);
@@ -40,7 +40,7 @@ class TCP: NSObject, StreamDelegate {
         outputStream = nil;
     }
 
-    func stream(_ stream: Stream, handle eventCode: Stream.Event) {
+    func stream(_ stream: Stream, _ eventCode: Stream.Event) {
         print("stream event \(eventCode)")
         switch eventCode {
         case .openCompleted:
