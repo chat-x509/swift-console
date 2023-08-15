@@ -9,21 +9,14 @@ public struct wrapVector {
 
 extension Data {
     init?(hex: String) {
-        guard hex.count % 2 == 0 else {
-            return nil
-        }
-        var data = Data()
+        var bytes = [UInt8]()
         var index = hex.startIndex
         while index < hex.endIndex {
             let byteString = hex[index..<hex.index(index, offsetBy: 2)]
-            if let byte = UInt8(byteString, radix: 16) {
-                data.append(byte)
-            } else {
-                return nil
-            }
+            if let byte = UInt8(byteString, radix: 16) { bytes.append(byte) } else { return nil }
             index = hex.index(index, offsetBy: 2)
         }
-        self = data
+        self.init(bytes)
     }
 }
 
