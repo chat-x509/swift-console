@@ -21,11 +21,6 @@ public class Form {
   }
 
   public static func show(data: Array<String>) {
-    var settings:termios = termios()
-    tcgetattr(STDIN_FILENO, &settings)
-    var saved = settings
-    settings.c_lflag &= ~(UInt32(ICANON) | UInt32(ECHO))
-    tcsetattr(STDIN_FILENO, TCSANOW, &settings)
     for i in 0...app.count-1 {
       print("\u{1b}[0m\u{1b}[1;97m\u{1b}[45m    \u{1b}[0;97m\u{1b}[1;104m \(app[i].name)\u{1b}[0m\u{1b}[0K")
     }
@@ -38,7 +33,6 @@ public class Form {
          }
       }
     }
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved)
   }
 
   public static var app: [screen] = [
