@@ -6,6 +6,7 @@ try Console.loop()
 public class Console {
 
   public static var quit = false
+  public static var no = "010-WELCOME"
 
   public static func loop() throws {
      print(": CHAT 💬 X.509 © SYNRC")

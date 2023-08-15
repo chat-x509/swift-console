@@ -16,6 +16,7 @@ public class Cmd {
   public static func help() {
      print(": bye — Quit Application")
      print(": kw — AES Key Wrap")
+     print(": form — Show FORM")
      print(": show — Show X.509 Envelopes")
      print(": kdf — Key Derive Function ")
   }
@@ -25,6 +26,7 @@ public class Cmd {
          case "bye": return true
          case "?": help() ; return false
          case "kw": try Block.testKeyWrap() ; return false
+         case "form": try Form.show(data: data) ; return false
          case "show": try Cmd.showDER(data: data) ; return false
          case "kdf": try Cmd.showKDF(data: data) ; return false
          default: return false
