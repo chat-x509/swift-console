@@ -17,8 +17,8 @@ public class TCP: NSObject, StreamDelegate {
         CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
            (url.absoluteString as! CFString), port, &readStream, &writeStream);
         print("Opening streams.")
-        outputStream = writeStream?.takeRetainedValue()
-        inputStream = readStream?.takeRetainedValue()
+//        outputStream = writeStream?.takeRetainedValue()
+//        inputStream = readStream?.takeRetainedValue()
         outputStream?.delegate = self;
         inputStream?.delegate = self;
         outputStream?.schedule(in: RunLoop.current, forMode: RunLoop.Mode.default);

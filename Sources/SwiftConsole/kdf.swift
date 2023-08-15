@@ -33,11 +33,11 @@ public class KDF {
   public static func derive(alg: String, key: Data, len: Int, data: Data) -> Data {
       let ceil = ceil(x: len, y: keysize(alg: alg))
       let seq = stride(from: ceil, to: 0, by: -1).map { $0 }
-      var res = Data(bytes: [])
+      var res = Data([])
       for item in seq {
           var iter = Data()
           iter.append(contentsOf: key)
-          iter.append(contentsOf: Data(bytes: [0,0,0,UInt8(item)]))
+          iter.append(contentsOf: Data([0,0,0,UInt8(item)]))
           iter.append(contentsOf: data)
           var kdf = KDF.hash(alg: alg, bin: iter)
           kdf.append(contentsOf: res)
