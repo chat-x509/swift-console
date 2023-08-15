@@ -10,7 +10,7 @@ public class Console {
          let data = filter(readLine()!)
          switch (data) {
              case []: Cmd.nop() ; continue
-             default: if (try Cmd.execute(data)) { quit = true }
+             default: quit = try Cmd.execute(data)
          }
      }
      print(": Bye!")
