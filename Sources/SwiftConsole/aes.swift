@@ -8,10 +8,7 @@ public struct wrapVector {
 }
 
 extension Data {
-    init?(hexString: String) {
-        var hex = hexString
-        hex = hex.replacingOccurrences(of: " ", with: "")
-        hex = hex.replacingOccurrences(of: "0x", with: "")
+    init?(hex: String) {
         guard hex.count % 2 == 0 else {
             return nil
         }
@@ -34,9 +31,9 @@ public class Block {
     public static var IV: UInt64 = 0xA6A6A6A6A6A6A6A6
     public static var vector: [wrapVector] = [
        wrapVector(
-            kek: SymmetricKey(data: Data(hexString: "f59782f1dceb0544a8da06b34969b9212b55ce6dcbdd0975a33f4b3f88b538da")!),
-            key: SymmetricKey(data: Data(hexString: "73d33060b5f9f2eb5785c0703ddfa704")!),
-           wrap: Data(hexString: "2e63946ea3c090902fa1558375fdb2907742ac74e39403fc")!), ]
+            kek: SymmetricKey(data: Data(hex: "f59782f1dceb0544a8da06b34969b9212b55ce6dcbdd0975a33f4b3f88b538da")!),
+            key: SymmetricKey(data: Data(hex: "73d33060b5f9f2eb5785c0703ddfa704")!),
+           wrap: Data(hex: "2e63946ea3c090902fa1558375fdb2907742ac74e39403fc")!), ]
     public static func testKeyWrap() throws {
        try vector.forEach { e in
             let kek = SymmetricKey(data: e.kek)
