@@ -7,9 +7,18 @@ public class Cmd {
   public static func exists(f: String) -> Bool { return FileManager.default.fileExists(atPath: f) }
   public static func nop() { print(">", terminator: " ") }
   public static func showKDF(data: Array<String>) throws {
-     let x = KDF.derive(alg: "sha512", key: Data(bytes: [0,1,2,3,4]),
-                        len: 20, data: Data(bytes: [100,101,102,103,104]))
+     let x = KDF.derive(alg: "sha512", key: Data([0,1,2,3,4]),
+                        len: 20, data: Data([100,101,102,103,104]))
      print(": KDF \(Array(x))")
+  }
+
+  public static func execute(data: Array<String>) throws {
+     switch (data[0]) {
+         case "bye": break
+         case "show": try Cmd.showDER(data: data)
+         case "kdf": try Cmd.showKDF(data: data)
+         default: Cmd.nop()
+     }
   }
 
   public static func showDER(data: Array<String>) throws {
@@ -31,7 +40,7 @@ public class Cmd {
      if (!Cmd.exists(f: url.path)) { print(": CMS file not found.") } else {
          let data = try Data(contentsOf: url)
          let cms = try CMSContentInfo(derEncoded: Array(data))
-         print(": \(cms.contentType)")
+         print(": \(cms)")
      }
   }
 
