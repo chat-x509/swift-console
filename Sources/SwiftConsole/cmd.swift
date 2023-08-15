@@ -27,7 +27,7 @@ public class Cmd {
          case "kw": try Block.testKeyWrap() ; return false
          case "show": try Cmd.showDER(data: data) ; return false
          case "kdf": try Cmd.showKDF(data: data) ; return false
-         default: Cmd.nop() ; return false
+         default: return false
      }
   }
 
