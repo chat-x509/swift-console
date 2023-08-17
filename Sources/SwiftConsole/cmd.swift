@@ -18,6 +18,7 @@ public class Cmd {
      print(": kw — AES Key Wrap")
      print(": form — Show FORM")
      print(": show — Show X.509 Envelopes")
+     print(": ecdsa — Show ECDSA Signature")
      print(": kdf — Key Derive Function ")
   }
 
@@ -39,10 +40,21 @@ public class Cmd {
             case "crt": try Cmd.showCRT(name: data[1])
             case "csr": try Cmd.showCSR(name: data[1])
             case "cms": try Cmd.showCMS(name: data[1])
+            case "ecdsa": try Cmd.showECDSA(name: data[1])
             default: ()
          }
      } else {
          print(": Not enough arguments.")
+     }
+  }
+
+  public static func showECDSA(name: String) throws {
+     print(": ECDSA=\(name)")
+     let url = URL(fileURLWithPath: name)
+     if (!Cmd.exists(f: url.path)) { print(": ECDSA file not found.") } else {
+         let data = try Data(contentsOf: url)
+         let ecdsa = try ECDSASigValue(derEncoded: Array(data))
+         print(": \(ecdsa)")
      }
   }
 
