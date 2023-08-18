@@ -1,5 +1,6 @@
 import Crypto
 import Foundation
+import ASN1SCG
 
 public class Cmd {
 
