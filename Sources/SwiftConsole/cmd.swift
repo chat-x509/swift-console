@@ -1,3 +1,4 @@
+import SwiftASN1
 import Crypto
 import Foundation
 import ASN1SCG
@@ -14,18 +15,25 @@ public class Cmd {
      print(": KDF \(Array(x))")
   }
 
+  public static func showV(data: Array<String>) throws {
+     let v = V(a: [1], b: true, c: [3],d: V_d_Sequence(d1: true,d2: false))
+     var serializer = DER.Serializer()
+     try v.serialize(into: &serializer, withIdentifier: V.defaultIdentifier)
+     print(": DER.bytes \(serializer.serializedBytes)")
+  }
+
   public static func help() {
+     print(": form — Get by NO and list FORMS")
+     print(": show — Show X.509 Envelopes <CMS CSR CRT ECDSA>")
      print(": bye — Quit Application")
      print(": kw — AES Key Wrap")
-     print(": form — Show FORM")
-     print(": show — Show X.509 Envelopes")
-     print(": ecdsa — Show ECDSA Signature")
      print(": kdf — Key Derive Function ")
   }
 
   public static func execute(_ data: Array<String>) throws -> Bool {
      switch (data[0]) {
          case "bye": return true
+         case "der": try Cmd.showV(data: data) ; return false
          case "?": help() ; return false
          case "kw": try Block.testKeyWrap() ; return false
          case "form": try Form.show(data: data) ; return false
@@ -45,7 +53,7 @@ public class Cmd {
             default: ()
          }
      } else {
-         print(": Not enough arguments.")
+         print(": Not enough arguments: show <FILE> <crt|csr|cms|ecdsa>")
      }
   }
 
