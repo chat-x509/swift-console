@@ -16,9 +16,10 @@ public class Cmd {
   }
 
   public static func showV(data: Array<String>) throws {
-     let v = V(a: [1], b: true, c: [3],d: V_d_Sequence(d1: true,d2: false))
+     let vv = V(a: [1], b: true, c: [3],d: V_d_Sequence(d1: true,d2: false))
+     let a = A.v(vv)
      var serializer = DER.Serializer()
-     try v.serialize(into: &serializer, withIdentifier: V.defaultIdentifier)
+     try a.serialize(into: &serializer)
      print(": DER.bytes \(serializer.serializedBytes)")
   }
 
