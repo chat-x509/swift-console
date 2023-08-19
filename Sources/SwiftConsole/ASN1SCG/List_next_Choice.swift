@@ -9,8 +9,10 @@ import Foundation
     case end(ASN1Null)
     @inlinable init(derEncoded rootNode: ASN1Node) throws {
         switch rootNode.identifier {
-            case List.defaultIdentifier: self = .linked_list(try List(derEncoded: rootNode))
-            case ASN1Null.defaultIdentifier: self = .end(try ASN1Null(derEncoded: rootNode))
+            case List.defaultIdentifier:
+                self = .linked_list(try List(derEncoded: rootNode))
+            case ASN1Null.defaultIdentifier:
+                self = .end(try ASN1Null(derEncoded: rootNode))
             default: throw ASN1Error.unexpectedFieldType(rootNode.identifier)
         }
     }

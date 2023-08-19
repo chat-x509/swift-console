@@ -15,12 +15,20 @@ public class Cmd {
      print(": KDF \(Array(x))")
   }
 
-  public static func showV(data: Array<String>) throws {
+  public static func showA(data: Array<String>) throws {
+     // basic check of SEQUENCE/CHOICE Algebraїc Data Types code genetaion
      let vv = V(a: [1], b: true, c: [3],d: V_d_Sequence(d1: true,d2: false))
-     let a = A.v(vv)
+     let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
+     let a = A.list_x(ll)
+     let b = A.v(vv)
      var serializer = DER.Serializer()
      try a.serialize(into: &serializer)
-     print(": DER.bytes \(serializer.serializedBytes)")
+     print(": A \(a)")
+     print(": DER.A \(serializer.serializedBytes)")
+         serializer = DER.Serializer()
+     try b.serialize(into: &serializer)
+     print(": B \(b)")
+     print(": DER.B \(serializer.serializedBytes)")
   }
 
   public static func help() {
@@ -34,7 +42,7 @@ public class Cmd {
   public static func execute(_ data: Array<String>) throws -> Bool {
      switch (data[0]) {
          case "bye": return true
-         case "der": try Cmd.showV(data: data) ; return false
+         case "der": try Cmd.showA(data: data) ; return false
          case "?": help() ; return false
          case "kw": try Block.testKeyWrap() ; return false
          case "form": try Form.show(data: data) ; return false

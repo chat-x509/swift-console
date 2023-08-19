@@ -6,20 +6,26 @@ import Foundation
 
 @usableFromInline indirect enum A: DERParseable, DERSerializable, Hashable, Sendable {
     case v(V)
-    case list(List)
+    case list_x(List)
     @inlinable init(derEncoded rootNode: ASN1Node) throws {
         switch rootNode.identifier {
             case V.defaultIdentifier:
                 self = .v(try V(derEncoded: rootNode))
             case List.defaultIdentifier:
-                self = .list(try List(derEncoded: rootNode))
+                self = .list_x(try List(derEncoded: rootNode))
             default: throw ASN1Error.unexpectedFieldType(rootNode.identifier)
         }
     }
     @inlinable func serialize(into coder: inout DER.Serializer) throws {
         switch self {
-            case .v(let v): try coder.serialize(v)
-            case .list(let list): try coder.serialize(list)
+            case .v(let v):
+                try coder.appendConstructedNode(
+                identifier: ASN1Identifier(tagWithNumber: 0, tagClass: .contextSpecific),
+                { coder in try coder.serialize(v) })
+            case .list_x(let list_x):
+                try coder.appendConstructedNode(
+                identifier: ASN1Identifier(tagWithNumber: 1, tagClass: .contextSpecific),
+                { coder in try coder.serialize(list_x) })
         }
     }
 
