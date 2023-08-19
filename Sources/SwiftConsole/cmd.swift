@@ -16,7 +16,7 @@ public class Cmd {
   }
 
   public static func showA(data: Array<String>) throws {
-     // basic check of SEQUENCE/CHOICE Algebraїc Data Types code genetaion
+     // basic check of SEQUENCE/CHOICE Algebraїc Data Types code generation
      let vv = V(a: [1], b: true, c: [3],d: V_d_Sequence(d1: true,d2: false))
      let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
      let a = A.list_x(ll)
