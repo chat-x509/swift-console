@@ -17,29 +17,10 @@ public class Cmd {
 
   public static func showA(data: Array<String>) throws {
      // basic check of SEQUENCE/CHOICE Algebraїc Data Types code generation
-     let xx: V? = try V(derEncoded: [48, 60, 161, 5, 49, 3, 2, 1, 1, 162, 5, 49, 3, 2, 1, 2, 131, 1, 3, 164, 3, 2, 1, 4, 133, 1, 255, 166, 3, 1, 1, 255, 167, 5, 49, 3, 2, 1, 5, 168, 5, 49, 3, 2, 1, 6, 137, 1, 7, 160, 3, 2, 1, 0, 4, 3, 50, 51, 52, 1, 1, 255])
-//     let xx: V? = try V(derEncoded: [48,13,129,1,1,130,1,255,163,5,49,3,2,1,2])
-//     let xx: V? = try V(derEncoded: [48,15,129,1,1,162,3,1,1,255,163,5,49,3,2,1,2])
-//     let xx: V? = try V(derEncoded: [48,16,129,1,1,130,1,255,163,5,49,3,2,1,2,1,1,255])
-// 48,24,129,1,1,130,1,255,49,3,2,1,2,49,3,2,1,3,49,3,2,1,4,1,1,255
+//     let xx: V? = try V(derEncoded: [48, 60, 161, 5, 49, 3, 2, 1, 1, 162, 5, 49, 3, 2, 1, 2, 131, 1, 3, 164, 3, 2, 1, 4, 133, 1, 255, 166, 3, 1, 1, 255, 167, 5, 49, 3, 2, 1, 5, 168, 5, 49, 3, 2, 1, 6, 137, 1, 7, 160, 3, 2, 1, 0, 4, 3, 50, 51, 52, 1, 1, 255])
+     let xx: V? = try V(derEncoded: [48, 57, 161, 3, 2, 1, 1, 162, 5, 49, 3, 2, 1, 2, 131, 1, 3, 164, 3, 2, 1, 4, 133, 1, 255, 166, 3, 1, 1, 255, 167, 3, 2, 1, 5, 168, 5, 49, 3, 2, 1, 6, 137, 1, 7, 160, 3, 2, 1, 0, 4, 4, 50, 51, 52, 54, 1, 1, 255])
 // io:format("~p~n",['List':encode('V',{'V',[1],[2],3,4,true,true,[5],[6],7,0,<<"HELO">>,true})]).
-
-/*
-     let xx: V? =  try V(derEncoded: [48,61,161,5,49,3,2,1,1,
-                                            162,5,49,3,2,1,2,
-                                            131,1,3,
-                                            164,3,2,1,4,
-                                            133,1,255,
-                                            166,3,1,1,255,
-                                            167,5,49,3,2,1,5,
-                                            168,5,59,3,2,1,6,
-                                            137,1,7,
-                                            160,3,2,1,0,
-                                            4,4,72,69,76,79,
-                                            1,1,255])
-*/
-
-     let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true, g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52]), l: true)
+     let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true, g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52,54]), l: true)
      var serializer = DER.Serializer()
      try vv.serialize(into: &serializer)
 /*     let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
