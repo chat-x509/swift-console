@@ -8,8 +8,8 @@ import Foundation
     @usableFromInline var version: K_version_IntEnum
     @usableFromInline var x: ArraySlice<UInt8>
     @usableFromInline var y: K_y_Sequence
-    @usableFromInline var w: [[[ArraySlice<UInt8>]]]
-    @inlinable init(version: K_version_IntEnum, x: ArraySlice<UInt8>, y: K_y_Sequence, w: [[[ArraySlice<UInt8>]]]) {
+    @usableFromInline var w: [[[[ArraySlice<UInt8>]]]]
+    @inlinable init(version: K_version_IntEnum, x: ArraySlice<UInt8>, y: K_y_Sequence, w: [[[[ArraySlice<UInt8>]]]]) {
         self.version = version
         self.x = x
         self.y = y
@@ -23,14 +23,19 @@ import Foundation
             print("x: \(x)\n")
             let y: K_y_Sequence = try K_y_Sequence(derEncoded: &nodes)
             print("y: \(y)\n")
-            let w: [[[ArraySlice<UInt8>]]] =
-                try DER.set<[[[ArraySlice<UInt8>]]]>(nodes.next()!, identifier: .set) { nodes1 in
-                var wAcc1: [[[ArraySlice<UInt8>]]] = []
+            let w: [[[[ArraySlice<UInt8>]]]] =
+                try DER.set<[[[[ArraySlice<UInt8>]]]]>(nodes.next()!, identifier: .set) { nodes1 in
+                var wAcc1: [[[[ArraySlice<UInt8>]]]] = []
                 while let wInner1 = nodes1.next() { wAcc1.append(
-                      try DER.sequence<[[ArraySlice<UInt8>]]>(wInner1, identifier: .sequence) { nodes2 in
-                      var wAcc2:[[ArraySlice<UInt8>]] = []
+                      try DER.sequence<[[[ArraySlice<UInt8>]]]>(wInner1, identifier: .sequence) { nodes2 in
+                      var wAcc2: [[[ArraySlice<UInt8>]]] = []
                       while let wInner2 = nodes2.next() { wAcc2.append(
-                            try DER.set(of: ArraySlice<UInt8>.self, identifier: .set, rootNode: wInner2)
+                            try DER.set<[[ArraySlice<UInt8>]]>(wInner2, identifier: .set) { nodes3 in
+                            var wAcc3: [[ArraySlice<UInt8>]] = []
+                            while let wInner3 = nodes3.next() { wAcc3.append(
+                                try DER.sequence(of: ArraySlice<UInt8>.self, identifier: .sequence, rootNode: wInner3)
+                            )}
+                            return wAcc3 }
                       )}
                       return wAcc2 }
                 )}
@@ -49,7 +54,11 @@ import Foundation
                 codec1 in for element1 in w {
                     try codec1.appendConstructedNode(identifier: .sequence) {
                         codec2 in for element2 in element1 {
-                           try codec2.serializeSetOf(element2)
+                            try codec2.appendConstructedNode(identifier: .set) {
+                                codec3 in for element3 in element2 {
+                                    try codec3.serializeSequenceOf(element3)
+                                }
+                            }
                         }
                     }
                 }
