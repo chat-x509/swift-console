@@ -16,27 +16,48 @@ public class Cmd {
   }
 
   public static func showA(data: Array<String>) throws {
-     let xx: V? = try V(derEncoded: [48, 57, 161, 3, 2, 1, 1, 162, 5, 49, 3, 2, 1, 2, 131, 1, 3, 164, 3, 2, 1, 4, 133, 1, 255, 166, 3, 1, 1, 255, 167, 3, 2, 1, 5, 168, 5, 49, 3, 2, 1, 6, 137, 1, 7, 160, 3, 2, 1, 0, 4, 4, 50, 51, 52, 54, 1, 1, 255])
-     let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true, g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52,54]), l: true)
+// V 12
+// > io:format("~p~n",['List':encode('V',{'V',[1],[2],3,4,true,true,[5],[6],7,0,<<"HELO">>,true})]).
+// {ok,<<48,57,161,3,2,1,1,162,5,49,3,2,1,2,131,1,3,164,3,2,1,4,133,1,255,166,3,
+//      1,1,255,167,3,2,1,5,168,5,49,3,2,1,6,137,1,7,160,3,2,1,0,4,4,72,69,76,
+//      79,1,1,255>>}
+// K 8
+// > io:format("~p~n",['List':encode('K',{'K',v1,1,{k_y,true,true,7,0},[[[[[[[[1,2,3],[4,5,6]],[[1]]]]]]]]})]).
+// {ok,<<48,63,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,41,48,39,49,37,
+//      48,35,49,33,48,31,49,22,48,9,2,1,1,2,1,2,2,1,3,48,9,2,1,4,2,1,5,2,1,6,
+//      49,5,48,3,2,1,1>>}
+// K 8
+// > io:format("~p~n",['List':encode('K',{'K',v1,1,{k_y,true,true,7,0},[[[[[[[[1]]]]]]]]})]).
+// {ok,<<48,39,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,17,48,15,49,13,
+//       48,11,49,9,48,7,49,5,48,3,2,1,1>>}
+// K 2
+// > io:format("~p~n",['List':encode('K',{'K',v1,1,{k_y,true,true,7,0},[[1]]})]).
+                            // {ok,<<48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1>>}
+     let k2: K? = try K(derEncoded: [48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1])
+     let xx: V? = try V(derEncoded: [48,57,161,3,2,1,1,162,5,49,3,2,1,2,131,1,3,164,3,2,1,4,133,1,255,166,3,
+                                     1,1,255,167,3,2,1,5,168,5,49,3,2,1,6,137,1,7,160,3,2,1,0,4,4,72,69,76,
+                                     79,1,1,255])
+     let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true,
+                g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52,54]), l: true)
      var serializer = DER.Serializer()
      try vv.serialize(into: &serializer)
+     print(": DER.vv \(serializer.serializedBytes)")
+     if let xx { print(": xx \(xx)") }
+     if let k2 { print(": k2 \(k2)") }
+
      let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
      let a = A.list_x(ll)
-     let b = A.v(vv)
          serializer = DER.Serializer()
      try a.serialize(into: &serializer)
      print(": A \(a)")
      print(": DER.A \(serializer.serializedBytes)")
+
+     let b = A.v(vv)
          serializer = DER.Serializer()
      try b.serialize(into: &serializer)
      print(": B \(b)")
      print(": DER.B \(serializer.serializedBytes)")
-         serializer = DER.Serializer()
-     let oc = OCSPCertStatus.unknown
-     try oc.serialize(into: &serializer)
-     print(": oc \(serializer.serializedBytes)")
-     print(": DER.vv \(serializer.serializedBytes)")
-     if let xx { print(": xx \(xx)") }
+
   }
 
   public static func help() {
