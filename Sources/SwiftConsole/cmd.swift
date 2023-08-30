@@ -34,16 +34,20 @@ public class Cmd {
 // > io:format("~p~n",['List':encode('K',{'K',v1,1,{k_y,true,true,7,0},[[1]]})]).
                             // {ok,<<48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1>>}
      let k2: K? = try K(derEncoded: [48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1])
+//     let k3: K? = try K(derEncoded: [48,29,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,7,48,5,49,3,2,1,1])
      let xx: V? = try V(derEncoded: [48,57,161,3,2,1,1,162,5,49,3,2,1,2,131,1,3,164,3,2,1,4,133,1,255,166,3,
                                      1,1,255,167,3,2,1,5,168,5,49,3,2,1,6,137,1,7,160,3,2,1,0,4,4,72,69,76,
                                      79,1,1,255])
+//   if let k3 { print(": k3 \(k3)") }
+     if let k2 { print(": k2 \(k2)") }
+//   if let xx { print(": xx \(xx)") }
+
+/*
      let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true,
                 g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52,54]), l: true)
      var serializer = DER.Serializer()
      try vv.serialize(into: &serializer)
      print(": DER.vv \(serializer.serializedBytes)")
-     if let xx { print(": xx \(xx)") }
-     if let k2 { print(": k2 \(k2)") }
 
      let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
      let a = A.list_x(ll)
@@ -57,7 +61,7 @@ public class Cmd {
      try b.serialize(into: &serializer)
      print(": B \(b)")
      print(": DER.B \(serializer.serializedBytes)")
-
+*/
   }
 
   public static func help() {
