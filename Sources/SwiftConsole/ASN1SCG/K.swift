@@ -8,8 +8,8 @@ import Foundation
     @usableFromInline var version: K_version_IntEnum
     @usableFromInline var x: ArraySlice<UInt8>
     @usableFromInline var y: K_y_Sequence
-    @usableFromInline var w: [[ArraySlice<UInt8>]]
-    @inlinable init(version: K_version_IntEnum, x: ArraySlice<UInt8>, y: K_y_Sequence, w: [[ArraySlice<UInt8>]]) {
+    @usableFromInline var w: [[[ArraySlice<UInt8>]]]
+    @inlinable init(version: K_version_IntEnum, x: ArraySlice<UInt8>, y: K_y_Sequence, w: [[[ArraySlice<UInt8>]]]) {
         self.version = version
         self.x = x
         self.y = y
@@ -23,14 +23,18 @@ import Foundation
             print("x: \(x)\n")
             let y: K_y_Sequence = try K_y_Sequence(derEncoded: &nodes)
             print("y: \(y)\n")
-            var wAcc1: [[ArraySlice<UInt8>]] = []
-            let w: [[ArraySlice<UInt8>]] =
-                try DER.set<[[ArraySlice<UInt8>]]>(nodes.next()!, identifier: .set) { nodes1 in
+            let w: [[[ArraySlice<UInt8>]]] =
+                try DER.set<[[[ArraySlice<UInt8>]]]>(nodes.next()!, identifier: .set) { nodes1 in
+                var wAcc1: [[[ArraySlice<UInt8>]]] = []
                 while let wInner1 = nodes1.next() { wAcc1.append(
-                      try DER.sequence(of: ArraySlice<UInt8>.self, identifier: .sequence, rootNode: wInner1))
-                }
-                return wAcc1
-            }
+                      try DER.sequence<[[ArraySlice<UInt8>]]>(wInner1, identifier: .sequence) { nodes2 in
+                      var wAcc2:[[ArraySlice<UInt8>]] = []
+                      while let wInner2 = nodes2.next() { wAcc2.append(
+                            try DER.set(of: ArraySlice<UInt8>.self, identifier: .set, rootNode: wInner2)
+                      )}
+                      return wAcc2 }
+                )}
+                return wAcc1 }
             print("w: \(w)\n")
             return K(version: version, x: x, y: y, w: w)
         }
@@ -40,7 +44,7 @@ import Foundation
         try coder.appendConstructedNode(identifier: identifier) { coder in
             try coder.serialize(version.rawValue)
             try coder.serialize(x)
-            try coder.appendConstructedNode(identifier: ASN1Identifier.set) { codec in for element in w { try codec.serializeSequenceOf(element) } }
+//            try coder.appendConstructedNode(identifier: ASN1Identifier.set) { codec in for element in w { try codec.serializeSequenceOf(element) } }
             try coder.serialize(y)
         }
     }
