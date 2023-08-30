@@ -44,8 +44,16 @@ import Foundation
         try coder.appendConstructedNode(identifier: identifier) { coder in
             try coder.serialize(version.rawValue)
             try coder.serialize(x)
-//            try coder.appendConstructedNode(identifier: ASN1Identifier.set) { codec in for element in w { try codec.serializeSequenceOf(element) } }
             try coder.serialize(y)
+            try coder.appendConstructedNode(identifier: .set) {
+                codec1 in for element1 in w {
+                    try codec1.appendConstructedNode(identifier: .sequence) {
+                        codec2 in for element2 in element1 {
+                           try codec2.serializeSetOf(element2)
+                        }
+                    }
+                }
+            }
         }
     }
 }

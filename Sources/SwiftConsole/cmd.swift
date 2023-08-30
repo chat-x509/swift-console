@@ -39,6 +39,10 @@ public class Cmd {
                                      1,1,255,167,3,2,1,5,168,5,49,3,2,1,6,137,1,7,160,3,2,1,0,4,4,72,69,76,
                                      79,1,1,255])
      if let k3 { print(": k3 \(k3)") }
+     var serializer = DER.Serializer()
+     try k3!.serialize(into: &serializer)
+     print(": DER.k3 \(serializer.serializedBytes)")
+
 //   if let k2 { print(": k2 \(k2)") }
 //   if let xx { print(": xx \(xx)") }
 
