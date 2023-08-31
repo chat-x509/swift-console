@@ -1,7 +1,7 @@
 import SwiftASN1
 import Crypto
+import CoreFoundation
 import Foundation
-import ASN1SCG
 
 public class Cmd {
 
@@ -45,26 +45,38 @@ public class Cmd {
 // >  io:format("~p~n",['List':encode('K',{'K',v1,1,{k_y,true,true,7,0},[[[[1]]]]})]).
 // {ok,<<48,31,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,9,48,7,49,5,48,3,2,1,1>>}
 
-//     let k2: K? = try K(derEncoded: [48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1])
+     let k2: K? = try K(derEncoded: [48,27,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,5,48,3,2,1,1])
 //     let k3: K? = try K(derEncoded: [48,29,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,7,48,5,49,3,2,1,1])
-     let k4: K? = try K(derEncoded: [48,31,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,9,48,7,49,5,48,3,2,1,1])
+//     let k4: K? = try K(derEncoded: [48,31,2,1,1,2,1,1,48,12,1,1,255,1,1,255,2,1,7,2,1,0,49,9,48,7,49,5,48,3,2,1,1])
      let xx: V? = try V(derEncoded: [48,57,161,3,2,1,1,162,5,49,3,2,1,2,131,1,3,164,3,2,1,4,133,1,255,166,3,
                                      1,1,255,167,3,2,1,5,168,5,49,3,2,1,6,137,1,7,160,3,2,1,0,4,4,72,69,76,
                                      79,1,1,255])
-     if let k4 { print(": k4 \(k4)") }
+//     if let k4 { print(": k4 \(k4)") }
+     if let k2 { print(": k2 \(k2)") }
      var serializer = DER.Serializer()
-     try k4!.serialize(into: &serializer)
+     try k2!.serialize(into: &serializer)
      print(": DER.k4 \(serializer.serializedBytes)")
 
 //   if let k2 { print(": k2 \(k2)") }
 //   if let xx { print(": xx \(xx)") }
 
-/*
-     let vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true,
+     var timer: CFAbsoluteTime = CFAbsoluteTimeGetCurrent()
+     var vv = V(a: [[1]], b: [[2]], c: [3], d: [4], e: true, f: true,
                 g: [[5]], h: [[6]], i: [7], j: [0], k: ASN1OctetString(contentBytes: [50,51,52,54]), l: true)
-     var serializer = DER.Serializer()
-     try vv.serialize(into: &serializer)
-     print(": DER.vv \(serializer.serializedBytes)")
+     var decoded: K? = nil
+     timer = CFAbsoluteTimeGetCurrent()
+     for i in 1...1_000_000 { try K(derEncoded: serializer.serializedBytes) }
+     timer = Double((CFAbsoluteTimeGetCurrent() - timer)*1000)
+     print("DECODE 1 000 000: \(Int(timer)) ms")
+     timer = CFAbsoluteTimeGetCurrent()
+     for i in 1...1_000_000 { try k2!.serialize(into: &serializer) }
+     timer = Double((CFAbsoluteTimeGetCurrent() - timer)*1000)
+     print("ENCODE 1 000 000: \(Int(timer)) ms")
+
+         serializer = DER.Serializer()
+     try xx!.serialize(into: &serializer)
+     print(": V.xx \(xx)")
+     print(": DER.V \(serializer.serializedBytes)")
 
      let ll = List(data: ASN1OctetString(contentBytes: [48,48]), next: List_next_Choice.end(ASN1Null()))
      let a = A.list_x(ll)
@@ -78,7 +90,7 @@ public class Cmd {
      try b.serialize(into: &serializer)
      print(": B \(b)")
      print(": DER.B \(serializer.serializedBytes)")
-*/
+
   }
 
   public static func help() {
