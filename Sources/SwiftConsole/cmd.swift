@@ -12,7 +12,24 @@ public class Cmd {
   public static func showKDF(data: Array<String>) throws {
      let x = KDF.derive(alg: "sha512", key: Data([0,1,2,3,4]),
                         len: 20, data: Data([100,101,102,103,104]))
+     var serializer = DER.Serializer()
      print(": KDF \(Array(x))")
+  }
+
+  public static func showK(data: Array<String>) throws {
+      let k: K? = try K(derEncoded: [48,10,49,8,48,6,48,4,2,2,1,1])
+     if let k { print(": k \(k)") }
+     var serializer = DER.Serializer()
+     try k!.serialize(into: &serializer)
+     print(": DER.k \(serializer.serializedBytes)")
+  }
+
+  public static func showName(data: Array<String>) throws {
+     let name: Name? = try Name(derEncoded: [48,13,49,11,48,9,6,3,85,4,6,19,2,85,65])
+     if let name { print(": name \(name)") }
+     var serializer = DER.Serializer()
+     try name!.serialize(into: &serializer)
+     print(": DER.name \(serializer.serializedBytes)")
   }
 
   public static func showA(data: Array<String>) throws {
@@ -104,7 +121,8 @@ public class Cmd {
   public static func execute(_ data: Array<String>) throws -> Bool {
      switch (data[0]) {
          case "bye": return true
-         case "der": try Cmd.showA(data: data) ; return false
+         case "der": try Cmd.showK(data: data) ; return false
+         case "cho": try Cmd.showName(data: data) ; return false
          case "?": help() ; return false
          case "kw": try Block.testKeyWrap() ; return false
          case "form": try Form.show(data: data) ; return false
