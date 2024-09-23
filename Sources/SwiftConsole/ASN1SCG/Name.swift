@@ -5,6 +5,7 @@ import Foundation
 
 // 'NameRDN':encode('Name',{'rdnSequence',[[{'AttributeTypeAndValue',{2,5,4,6},<<19,2,85,65>>}]]}).
 // {ok,<<48,13,49,11,48,9,6,3,85,4,6,19,2,85,65>>}
+// DER.name [48,13,49,11,48,9,6,3,85,4,6,19,2,85,65]
 
 @usableFromInline indirect enum Name: DERParseable, DERSerializable, Hashable, Sendable {
     case rdnSequence([[AttributeTypeAndValue]])
@@ -27,8 +28,16 @@ import Foundation
     }
     @inlinable func serialize(into coder: inout DER.Serializer) throws {
         switch self {
-            case .rdnSequence(let rdnSequence): try coder.serialize(true)
+            case .rdnSequence(let w):
+                try coder.appendConstructedNode(identifier: ASN1Identifier.sequence) { codec1 in
+                    for w1 in w {
+                        try codec1.appendConstructedNode(identifier: ASN1Identifier.set) { codec1_1 in
+                            for w2 in w1 {
+                                try codec1_1.serialize(w2)
+                            }
+                        }
+                    }
+                }
         }
     }
-
 }
