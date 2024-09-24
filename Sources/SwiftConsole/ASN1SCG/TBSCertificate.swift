@@ -14,8 +14,8 @@ import Foundation
     @usableFromInline var subjectPublicKeyInfo: SubjectPublicKeyInfo
     @usableFromInline var issuerUniqueID: ASN1BitString?
     @usableFromInline var subjectUniqueID: ASN1BitString?
-    @usableFromInline var extensions: [Extension]
-    @inlinable init(version: Int, serialNumber: ArraySlice<UInt8>, signature: AlgorithmIdentifier, issuer: Name, validity: Validity, subject: Name, subjectPublicKeyInfo: SubjectPublicKeyInfo, issuerUniqueID: ASN1BitString?, subjectUniqueID: ASN1BitString?, extensions: [Extension]) {
+    @usableFromInline var extensions: [Extension]?
+    @inlinable init(version: Int, serialNumber: ArraySlice<UInt8>, signature: AlgorithmIdentifier, issuer: Name, validity: Validity, subject: Name, subjectPublicKeyInfo: SubjectPublicKeyInfo, issuerUniqueID: ASN1BitString?, subjectUniqueID: ASN1BitString?, extensions: [Extension]?) {
         self.version = version
         self.serialNumber = serialNumber
         self.signature = signature
@@ -40,8 +40,7 @@ import Foundation
             let subjectPublicKeyInfo: SubjectPublicKeyInfo = try SubjectPublicKeyInfo(derEncoded: &nodes)
             let issuerUniqueID: ASN1BitString? = try DER.optionalImplicitlyTagged(&nodes, tag: ASN1Identifier(tagWithNumber: 1, tagClass: .contextSpecific))
             let subjectUniqueID: ASN1BitString? = try DER.optionalImplicitlyTagged(&nodes, tag: ASN1Identifier(tagWithNumber: 2, tagClass: .contextSpecific))
-            let extensions: [Extension] = [] //try DER.explicitlyTagged(&nodes, tagNumber: 3, tagClass: .contextSpecific) { node in try DER.sequence(of: Extension.self, identifier: .sequence, rootNode: node) }
-            print(": root \(root)")
+            let extensions: [Extension]? = try DER.optionalExplicitlyTagged(&nodes, tagNumber: 3, tagClass: .contextSpecific) { node in try DER.sequence(of: Extension.self, identifier: .sequence, rootNode: node) }
             return TBSCertificate(version: version, serialNumber: serialNumber, signature: signature, issuer: issuer, validity: validity, subject: subject, subjectPublicKeyInfo: subjectPublicKeyInfo, issuerUniqueID: issuerUniqueID, subjectUniqueID: subjectUniqueID, extensions: extensions)
         }
     }
@@ -57,7 +56,7 @@ import Foundation
             try coder.serialize(subjectPublicKeyInfo)
             if let issuerUniqueID = self.issuerUniqueID { try coder.serializeOptionalImplicitlyTagged(issuerUniqueID, withIdentifier: ASN1Identifier(tagWithNumber: 1, tagClass: .contextSpecific)) }
             if let subjectUniqueID = self.subjectUniqueID { try coder.serializeOptionalImplicitlyTagged(subjectUniqueID, withIdentifier: ASN1Identifier(tagWithNumber: 2, tagClass: .contextSpecific)) }
-            try coder.serialize(explicitlyTaggedWithTagNumber: 3, tagClass: .contextSpecific) { codec in try codec.serializeSequenceOf(extensions) }
+//            try coder.serialize(explicitlyTaggedWithTagNumber: 3, tagClass: .contextSpecific) { codec in try codec.serializeSequenceOf(extensions) }
         }
     }
  
