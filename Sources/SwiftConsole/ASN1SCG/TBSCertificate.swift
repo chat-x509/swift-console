@@ -31,7 +31,7 @@ import Foundation
          @inlinable init(derEncoded root: ASN1Node,
         withIdentifier identifier: ASN1Identifier) throws {
         self = try DER.sequence(root, identifier: identifier) { nodes in
-            let version: Int = (try DER.optionalImplicitlyTagged(&nodes, tag: ASN1Identifier(tagWithNumber: 0, tagClass: .contextSpecific)))!
+            let version: Int = try DER.decodeDefaultExplicitlyTagged(&nodes, tagNumber: 0, tagClass: .contextSpecific, defaultValue: Int(0))
             let serialNumber: ArraySlice<UInt8> = try ArraySlice<UInt8>(derEncoded: &nodes)
             let signature: AlgorithmIdentifier = try AlgorithmIdentifier(derEncoded: &nodes)
             let issuer: Name = try Name(derEncoded: &nodes)
@@ -40,7 +40,8 @@ import Foundation
             let subjectPublicKeyInfo: SubjectPublicKeyInfo = try SubjectPublicKeyInfo(derEncoded: &nodes)
             let issuerUniqueID: ASN1BitString? = try DER.optionalImplicitlyTagged(&nodes, tag: ASN1Identifier(tagWithNumber: 1, tagClass: .contextSpecific))
             let subjectUniqueID: ASN1BitString? = try DER.optionalImplicitlyTagged(&nodes, tag: ASN1Identifier(tagWithNumber: 2, tagClass: .contextSpecific))
-            let extensions: [Extension] = try DER.explicitlyTagged(&nodes, tagNumber: 3, tagClass: .contextSpecific) { node in try DER.sequence(of: Extension.self, identifier: .sequence, rootNode: node) }
+            let extensions: [Extension] = [] //try DER.explicitlyTagged(&nodes, tagNumber: 3, tagClass: .contextSpecific) { node in try DER.sequence(of: Extension.self, identifier: .sequence, rootNode: node) }
+            print(": root \(root)")
             return TBSCertificate(version: version, serialNumber: serialNumber, signature: signature, issuer: issuer, validity: validity, subject: subject, subjectPublicKeyInfo: subjectPublicKeyInfo, issuerUniqueID: issuerUniqueID, subjectUniqueID: subjectUniqueID, extensions: extensions)
         }
     }

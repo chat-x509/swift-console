@@ -14,7 +14,7 @@ import Foundation
         self.signatureValue = signatureValue
     }
 
-         @inlinable init(derEncoded root: ASN1Node,
+    @inlinable init(derEncoded root: ASN1Node,
         withIdentifier identifier: ASN1Identifier) throws {
         self = try DER.sequence(root, identifier: identifier) { nodes in
             let tbsCertificate: TBSCertificate = try TBSCertificate(derEncoded: &nodes)
