@@ -16,8 +16,7 @@ import Foundation
         withIdentifier identifier: ASN1Identifier) throws {
         self = try DER.sequence(root, identifier: identifier) { nodes in
             let algorithm: ASN1ObjectIdentifier = try ASN1ObjectIdentifier(derEncoded: &nodes)
-//            let parameters: ASN1Any? = try ASN1Any(derEncoded: &nodes)
-            let parameters = nodes.next().map { ASN1Any(derEncoded: $0) }
+            let parameters: ASN1Any? = nodes.next().map { ASN1Any(derEncoded: $0) }
             return AlgorithmIdentifier(algorithm: algorithm, parameters: parameters)
         }
     }

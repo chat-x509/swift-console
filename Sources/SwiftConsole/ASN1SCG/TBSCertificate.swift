@@ -56,7 +56,7 @@ import Foundation
             try coder.serialize(subjectPublicKeyInfo)
             if let issuerUniqueID = self.issuerUniqueID { try coder.serializeOptionalImplicitlyTagged(issuerUniqueID, withIdentifier: ASN1Identifier(tagWithNumber: 1, tagClass: .contextSpecific)) }
             if let subjectUniqueID = self.subjectUniqueID { try coder.serializeOptionalImplicitlyTagged(subjectUniqueID, withIdentifier: ASN1Identifier(tagWithNumber: 2, tagClass: .contextSpecific)) }
-//            try coder.serialize(explicitlyTaggedWithTagNumber: 3, tagClass: .contextSpecific) { codec in try codec.serializeSequenceOf(extensions) }
+            if let extensions = self.extensions { try coder.serialize(explicitlyTaggedWithTagNumber: 3, tagClass: .contextSpecific) { codec in try codec.serializeSequenceOf(extensions) } }
         }
     }
  

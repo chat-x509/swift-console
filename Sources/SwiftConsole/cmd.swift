@@ -172,8 +172,14 @@ public class Cmd {
      let url = URL(fileURLWithPath: name)
      if (!Cmd.exists(f: url.path)) { print(": CRT file not found.") } else {
          let data = try Data(contentsOf: url)
-         let crt = try Certificate(derEncoded: Array(data))
-         print(": \(crt)")
+         print(": CERT.Serialized \(Array(data))")
+         var crt = try Certificate(derEncoded: Array(data))
+         print(": CERT.ASN1 \(crt)")
+         var serializer = DER.Serializer()
+         try crt.serialize(into: &serializer)
+         print(": CERT.Serialized \(serializer.serializedBytes)")
+         crt = try Certificate(derEncoded: Array(serializer.serializedBytes))
+         print(": CERT.ASN1 \(crt)")
      }
   }
 /*
