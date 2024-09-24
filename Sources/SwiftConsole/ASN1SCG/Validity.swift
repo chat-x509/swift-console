@@ -3,28 +3,28 @@ import SwiftASN1
 import Crypto
 import Foundation
 
-@usableFromInline struct AttributeTypeAndValue: DERImplicitlyTaggable, Hashable, Sendable {
+@usableFromInline struct Validity: DERImplicitlyTaggable, Hashable, Sendable {
     @inlinable static var defaultIdentifier: ASN1Identifier { .sequence }
-    @usableFromInline var type: ASN1ObjectIdentifier
-    @usableFromInline var value: ASN1Any
-    @inlinable init(type: ASN1ObjectIdentifier, value: ASN1Any) {
-        self.type = type
-        self.value = value
+    @usableFromInline var notBefore: Time
+    @usableFromInline var notAfter: Time
+    @inlinable init(notBefore: Time, notAfter: Time) {
+        self.notBefore = notBefore
+        self.notAfter = notAfter
     }
 
          @inlinable init(derEncoded root: ASN1Node,
         withIdentifier identifier: ASN1Identifier) throws {
         self = try DER.sequence(root, identifier: identifier) { nodes in
-            let type: ASN1ObjectIdentifier = try ASN1ObjectIdentifier(derEncoded: &nodes)
-            let value: ASN1Any = try ASN1Any(derEncoded: &nodes)
-            return AttributeTypeAndValue(type: type, value: value)
+            let notBefore: Time = try Time(derEncoded: &nodes)
+            let notAfter: Time = try Time(derEncoded: &nodes)
+            return Validity(notBefore: notBefore, notAfter: notAfter)
         }
     }
      @inlinable func serialize(into coder: inout DER.Serializer,
         withIdentifier identifier: ASN1Identifier) throws {
         try coder.appendConstructedNode(identifier: identifier) { coder in
-            try coder.serialize(type)
-            try coder.serialize(value)
+            try coder.serialize(notBefore)
+            try coder.serialize(notAfter)
         }
     }
  

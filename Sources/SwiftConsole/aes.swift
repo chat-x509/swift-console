@@ -1,12 +1,12 @@
 import Foundation
 import Crypto
-
+/*
 public struct wrapVector {
     let kek: SymmetricKey
     let key: SymmetricKey
     let wrap: Data
 }
-
+*/
 extension Data {
     init?(hex: String) {
         var bytes = [UInt8]()
@@ -23,6 +23,7 @@ extension Data {
 
 public class Block {
     public static var IV: UInt64 = 0xA6A6A6A6A6A6A6A6
+/*
     public static var vector: [wrapVector] = [
        wrapVector(
            kek: SymmetricKey(data: Data(hex: "f59782f1dceb0544a8da06b34969b9212b55ce6dcbdd0975a33f4b3f88b538da")!),
@@ -40,6 +41,6 @@ public class Block {
            print(": Unwrapped \(unwrapped)")
        }
     }
-
+*/
 }
 

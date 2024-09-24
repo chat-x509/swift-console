@@ -8,7 +8,7 @@ public class Cmd {
   public static func exists(f: String) -> Bool { return FileManager.default.fileExists(atPath: f) }
 
   public static func nop() { print(">", terminator: " ") }
-
+/*
   public static func showKDF(data: Array<String>) throws {
      let x = KDF.derive(alg: "sha512", key: Data([0,1,2,3,4]),
                         len: 20, data: Data([100,101,102,103,104]))
@@ -23,7 +23,7 @@ public class Cmd {
      try k!.serialize(into: &serializer)
      print(": DER.k \(serializer.serializedBytes)")
   }
-
+*/
   public static func showName(data: Array<String>) throws {
      let name: Name? = try Name(derEncoded: [48,13,49,11,48,9,6,3,85,4,6,19,2,85,65])
      if let name { print(": name \(name)") }
@@ -31,7 +31,7 @@ public class Cmd {
      try name!.serialize(into: &serializer)
      print(": DER.name \(serializer.serializedBytes)")
   }
-
+/*
   public static func showA(data: Array<String>) throws {
 // V 12
 // > io:format("~p~n",['List':encode('V',{'V',[1],[2],3,4,true,true,[5],[6],7,0,<<"HELO">>,true})]).
@@ -109,6 +109,7 @@ public class Cmd {
      print(": DER.B \(serializer.serializedBytes)")
 
   }
+*/
 
   public static func help() {
      print(": form — Get by NO and list FORMS")
@@ -121,13 +122,13 @@ public class Cmd {
   public static func execute(_ data: Array<String>) throws -> Bool {
      switch (data[0]) {
          case "bye": return true
-         case "der": try Cmd.showK(data: data) ; return false
+  //       case "der": try Cmd.showK(data: data) ; return false
          case "cho": try Cmd.showName(data: data) ; return false
          case "?": help() ; return false
-         case "kw": try Block.testKeyWrap() ; return false
+//         case "kw": try Block.testKeyWrap() ; return false
          case "form": try Form.show(data: data) ; return false
          case "show": try Cmd.showDER(data: data) ; return false
-         case "kdf": try Cmd.showKDF(data: data) ; return false
+//         case "kdf": try Cmd.showKDF(data: data) ; return false
          default: return false
      }
   }
@@ -136,16 +137,16 @@ public class Cmd {
      if (data.count > 2) {
          switch (data[2]) {
             case "crt": try Cmd.showCRT(name: data[1])
-            case "csr": try Cmd.showCSR(name: data[1])
-            case "cms": try Cmd.showCMS(name: data[1])
-            case "ecdsa": try Cmd.showECDSA(name: data[1])
+//            case "csr": try Cmd.showCSR(name: data[1])
+//            case "cms": try Cmd.showCMS(name: data[1])
+//            case "ecdsa": try Cmd.showECDSA(name: data[1])
             default: ()
          }
      } else {
          print(": Not enough arguments: show <FILE> <crt|csr|cms|ecdsa>")
      }
   }
-
+/*
   public static func showECDSA(name: String) throws {
      print(": ECDSA=\(name)")
      let url = URL(fileURLWithPath: name)
@@ -165,7 +166,7 @@ public class Cmd {
          print(": \(cms)")
      }
   }
-
+*/
   public static func showCRT(name: String) throws {
      print(": CRT=\(name)")
      let url = URL(fileURLWithPath: name)
@@ -175,7 +176,7 @@ public class Cmd {
          print(": \(crt)")
      }
   }
-
+/*
   public static func showCSR(name: String) throws {
      print(": CSR=\(name)")
      let url = URL(fileURLWithPath: name)
@@ -185,5 +186,5 @@ public class Cmd {
          print(": \(csr)")
      }
   }
-
+*/
 }

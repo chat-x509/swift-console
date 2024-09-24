@@ -3,28 +3,28 @@ import SwiftASN1
 import Crypto
 import Foundation
 
-@usableFromInline struct AttributeTypeAndValue: DERImplicitlyTaggable, Hashable, Sendable {
+@usableFromInline struct BinaryField: DERImplicitlyTaggable, Hashable, Sendable {
     @inlinable static var defaultIdentifier: ASN1Identifier { .sequence }
-    @usableFromInline var type: ASN1ObjectIdentifier
-    @usableFromInline var value: ASN1Any
-    @inlinable init(type: ASN1ObjectIdentifier, value: ASN1Any) {
-        self.type = type
-        self.value = value
+    @usableFromInline var m: ArraySlice<UInt8>
+    @usableFromInline var p: BinaryField_p_Choice?
+    @inlinable init(m: ArraySlice<UInt8>, p: BinaryField_p_Choice?) {
+        self.m = m
+        self.p = p
     }
 
          @inlinable init(derEncoded root: ASN1Node,
         withIdentifier identifier: ASN1Identifier) throws {
         self = try DER.sequence(root, identifier: identifier) { nodes in
-            let type: ASN1ObjectIdentifier = try ASN1ObjectIdentifier(derEncoded: &nodes)
-            let value: ASN1Any = try ASN1Any(derEncoded: &nodes)
-            return AttributeTypeAndValue(type: type, value: value)
+            let m: ArraySlice<UInt8> = try ArraySlice<UInt8>(derEncoded: &nodes)
+            let p: BinaryField_p_Choice? = try BinaryField_p_Choice(derEncoded: &nodes)
+            return BinaryField(m: m, p: p)
         }
     }
      @inlinable func serialize(into coder: inout DER.Serializer,
         withIdentifier identifier: ASN1Identifier) throws {
         try coder.appendConstructedNode(identifier: identifier) { coder in
-            try coder.serialize(type)
-            try coder.serialize(value)
+            try coder.serialize(m)
+            if let p = self.p { try coder.serialize(p) }
         }
     }
  

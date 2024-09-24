@@ -18,7 +18,7 @@ public class KDF {
           default: return -1
       }
   }
-
+/*
   public static func hash(alg: String, bin: Data) -> Data {
       switch (alg) {
           case "md5": return Data(Insecure.MD5.hash(data: bin).makeIterator())
@@ -45,5 +45,6 @@ public class KDF {
       }
       return res.subdata(in: 0 ..< len)
   }
+*/
 
 }
